@@ -11,9 +11,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Nunito', 'sans-serif'],
-        headline: ['Playfair Display', 'serif'],
-        code: ['Source Code Pro', 'monospace'],
+        body: ['var(--font-body)'],
+        headline: ['var(--font-headline)'],
+        code: ['var(--font-code)'],
       },
       colors: {
         background: 'hsl(var(--background))',
