@@ -1,0 +1,256 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 238 55% 10%; /* Very Dark Navy Blue */
+    --foreground: 220 20% 95%; /* Light Blue/Gray */
+    --card: 227 53% 22%; /* Dark Blue */
+    --card-foreground: 220 20% 95%;
+    --popover: 238 55% 10%;
+    --popover-foreground: 220 20% 95%;
+    --primary: 218 33% 65%; /* Lighter Steel Blue for highlights */
+    --primary-foreground: 238 55% 10%;
+    --secondary: 227 16% 32%;
+    --secondary-foreground: 220 20% 95%;
+    --muted: 227 16% 32%;
+    --muted-foreground: 220 20% 70%; /* Blue Gray */
+    --accent: 218 30% 45%; /* Steel Blue */
+    --accent-foreground: 220 20% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 218 30% 35%;
+    --input: 218 30% 35%;
+    --ring: 218 33% 65%;
+    --radius: 0.8rem;
+  }
+  .dark {
+    --background: 238 55% 10%; /* Very Dark Navy Blue */
+    --foreground: 220 20% 95%; /* Light Blue/Gray */
+    --card: 227 53% 18%; /* Darker Blue for Card */
+    --card-foreground: 220 20% 95%;
+    --popover: 238 55% 8%;
+    --popover-foreground: 220 20% 95%;
+    --primary: 218 33% 75%; /* Lighter Steel Blue for highlights */
+    --primary-foreground: 238 55% 10%;
+    --secondary: 227 16% 22%;
+    --secondary-foreground: 220 20% 95%;
+    --muted: 227 16% 22%;
+    --muted-foreground: 220 20% 60%; /* Blue Gray */
+    --accent: 218 30% 55%; /* Steel Blue */
+    --accent-foreground: 220 20% 98%;
+    --destructive: 0 63% 40%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 218 30% 30%;
+    --input: 218 30% 30%;
+    --ring: 218 33% 75%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .glowing-card {
+    @apply relative overflow-hidden;
+  }
+  .glowing-card::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 300px;
+    background-image: conic-gradient(
+      transparent,
+      hsl(var(--primary) / 0.8),
+      transparent 30%
+    );
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 4s linear infinite;
+  }
+  .glowing-card::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    background-color: hsl(var(--card));
+    border-radius: inherit;
+  }
+  .glowing-card-content {
+    @apply relative z-10;
+  }
+
+  .static-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: 66vw 82vh #FFF, 2vw 4vh #FFF, 62vw 1vh #FFF, 8vw 58vh #FFF, 89vw 7vh #FFF, 73vw 60vh #FFF, 51vw 32vh #FFF, 8vw 98vh #FFF, 83vw 63vh #FFF, 24vw 55vh #FFF, 4vw 87vh #FFF, 98vw 87vh #FFF, 97vw 2vh #FFF, 6vw 17vh #FFF, 70vw 71vh #FFF, 56vw 65vh #FFF, 15vw 23vh #FFF, 1vw 91vh #FFF, 3vw 61vh #FFF, 13vw 8vh #FFF, 61vw 9vh #FFF, 83vw 95vh #FFF, 54vw 2vh #FFF, 8vw 2vh #FFF, 19vw 90vh #FFF, 83vw 22vh #FFF, 48vw 86vh #FFF, 93vw 3vh #FFF, 23vw 24vh #FFF, 2vw 27vh #FFF;
+  }
+
+  .star-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    --star-color: hsl(var(--foreground));
+    --star-size-1: 1px;
+    --star-size-2: 2px;
+    --star-size-3: 3px;
+  }
+  .star-field .layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation-play-state: paused;
+  }
+
+  .star-field[data-animating="true"] .layer {
+    animation-play-state: running;
+  }
+
+  /* Efficient Star Generation with box-shadow */
+  @function multiple-box-shadow($n) {
+    $value: '#{random(2000)}px #{random(2000)}px #FFF';
+    @for $i from 2 through $n {
+      $value: '#{$value}, #{random(2000)}px #{random(2000)}px #FFF';
+    }
+    @return unquote($value);
+  }
+
+  .star-field .layer:nth-child(1) {
+    animation: anim-stars 50s linear infinite;
+    --shadows: 700;
+  }
+  .star-field .layer:nth-child(2) {
+    animation: anim-stars 100s linear infinite;
+    --shadows: 200;
+  }
+  .star-field .layer:nth-child(3) {
+    animation: anim-stars 150s linear infinite;
+    --shadows: 100;
+  }
+  
+  .star-field .layer {
+     --shadow-list: 16vw 68vh 0 0 var(--star-color), 92vw 3vh 1px 1px var(--star-color),
+      8vw 43vh 1px 0 var(--star-color), 83vw 2vh 0 1px var(--star-color),
+      60vw 10vh 1px 0 var(--star-color), 1vw 12vh 0 0 var(--star-color),
+      3vw 78vh 1px 1px var(--star-color), 73vw 95vh 0 0 var(--star-color),
+      87vw 95vh 0 1px var(--star-color), 51vw 3vh 1px 1px var(--star-color),
+      3vw 53vh 1px 0 var(--star-color), 63vw 41vh 1px 0 var(--star-color),
+      11vw 5vh 0 0 var(--star-color), 4vw 9vh 0 0 var(--star-color),
+      22vw 3vh 1px 1px var(--star-color), 56vw 91vh 1px 1px var(--star-color),
+      10vw 20vh 0 0 var(--star-color), 45vw 80vh 1px 1px var(--star-color),
+      80vw 50vh 1px 0 var(--star-color), 25vw 15vh 0 1px var(--star-color),
+      95vw 60vh 1px 0 var(--star-color), 5vw 40vh 0 0 var(--star-color),
+      30vw 90vh 1px 1px var(--star-color), 70vw 10vh 0 0 var(--star-color),
+      90vw 25vh 0 1px var(--star-color), 55vw 5vh 1px 1px var(--star-color),
+      15vw 65vh 1px 0 var(--star-color), 68vw 30vh 1px 0 var(--star-color),
+      2vw 85vh 0 0 var(--star-color), 48vw 18vh 0 0 var(--star-color),
+      28vw 8vh 1px 1px var(--star-color), 62vw 88vh 1px 1px var(--star-color);
+      
+    width: var(--size);
+    height: var(--size);
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: var(--shadow-list);
+  }
+
+  .star-field .layer:nth-child(1) {
+    --size: var(--star-size-1);
+  }
+  .star-field .layer:nth-child(2) {
+    --size: var(--star-size-2);
+  }
+  .star-field .layer:nth-child(3) {
+    --size: var(--star-size-3);
+  }
+}
+
+@keyframes pulse-delay {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes rotate {
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes anim-stars {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-2000px);
+  }
+}
+
+@keyframes take-off {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+  100% {
+    transform: translateY(-100px) scale(1.2);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes land {
+  from {
+    bottom: 50%;
+    transform: translateY(50%) rotate(0deg);
+  }
+  to {
+    bottom: 80px; /* Adjust based on your layout */
+    transform: translateY(0) rotate(0deg);
+  }
+}
